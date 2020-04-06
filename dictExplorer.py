@@ -6,10 +6,13 @@ class DictationExplorer:
         self._words_dict = set()
         with open(dict_file, 'r') as f:
             for line in f:
-                self._words_dict.add(line)
+                self._words_dict.add(line.strip('\n'))
 
     def add_word(self, word: str):
         """Добавление новго слова в словарь"""
         self._words_dict.add(word)
         with open(self._dict_file, 'w') as f:
             f.writelines([word])
+
+    def print_dict(self):
+        print(self._words_dict)
