@@ -7,14 +7,12 @@ INCORRECT_WORDS = ('мома', 'дйм', 'посмщь', 'нежда', 'плмя
 
 class MyTestCase(unittest.TestCase):
     dict_exp = DictationExplorer(
-        '/home/IRD-PC/Projects/Python/Spellchecker/Dictionaries/russian.txt'
+        '/home/IRD-PC/Projects/Python/Spellchecker/Dictionaries/russian_dict.txt'
     )
 
     def test_add_word(self):
-        self.assertFalse('new_word' in self.dict_exp._words_dict,
-                         'Слово уже в словаре')
         self.dict_exp.add_word('new_word')
-        self.assertTrue('new_word' in self.dict_exp._words_dict,
+        self.assertTrue(self.dict_exp.check_word_in_dict('new_word'),
                         'Слово не добавлено')
 
     def test_check_word_in_dict(self):

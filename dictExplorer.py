@@ -1,4 +1,5 @@
 from spellExplorer import SpellExplorer
+from wordData import WordData
 
 
 class DictationExplorer:
@@ -8,13 +9,16 @@ class DictationExplorer:
         self._dict_file = dict_file
         self._words_dict = set()
         with open(dict_file, 'r') as f:
+            i = 1
             for line in f:
-                self._words_dict.add(line.strip('\n'))
+                line_data = line.split(':')
+                word = WordData(line_data[0], float(line_data[1].strip('\n')))
+                self._words_dict.add(word)
 
     def check_word_in_dict(self, search_word: str) -> bool:
         """Проверяет вхождение слова в словарь"""
         for dict_word in self._words_dict:
-            if search_word == dict_word:
+            if search_word == dict_word.word:
                 return True
         return False
 
@@ -27,6 +31,6 @@ class DictationExplorer:
 
     def add_word(self, word: str):
         """Добавление новго слова в словарь"""
-        self._words_dict.add(word)
+        self._words_dict.add(WordData(word, 0))
         with open(self._dict_file, 'a') as f:
-            f.writelines([word])
+            f.writelines([f'{word}:0'])

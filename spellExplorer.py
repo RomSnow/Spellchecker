@@ -1,5 +1,6 @@
-from collections import Generator
 from difflib import SequenceMatcher
+
+from wordData import WordData
 
 
 class SpellExplorer:
@@ -7,25 +8,33 @@ class SpellExplorer:
 
     @property
     def substitution_words(self) -> tuple:
-        return tuple(t[0] for t in self._substitution_words)
+        return tuple(t[2] for t in self._substitution_words)
 
     def __init__(self, incorrect_word: str):
         self._count_substitution_words = 5
         self._word = incorrect_word
         self._substitution_words = list()
 
-    def check_for_similarity(self, word_to_check: str):
+    def check_for_similarity(self, word_to_check: WordData):
         """
         Сравнивает слова на схожесть, обновляет наиболее подходящее на замену
         """
-        diff_index = SequenceMatcher(None, self._word, word_to_check) \
+        diff_index = SequenceMatcher(None, self._word, word_to_check.word) \
             .ratio()
+        if word_to_check.word == 'мама':
+            print('мама', word_to_check.popular_index, diff_index)
         if not self._substitution_words:
-            self._substitution_words.append((word_to_check, diff_index))
+            self._substitution_words.append(
+                (word_to_check.popular_index, diff_index, word_to_check.word)
+            )
 
-        for word, di in self._substitution_words:
-            if diff_index > di:
-                self._substitution_words.append((word_to_check, diff_index))
-            sorted(self._substitution_words)
+        for pop_index, di, word in self._substitution_words:
+            self._substitution_words.sort()
             if len(self._substitution_words) > self._count_substitution_words:
                 self._substitution_words.pop(0)
+            if diff_index > di:
+                self._substitution_words.append(
+                    (word_to_check.popular_index,
+                     diff_index, word_to_check.word)
+                )
+                break
