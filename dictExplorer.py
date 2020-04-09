@@ -1,5 +1,6 @@
 from spellExplorer import SpellExplorer
 from wordData import WordData
+from difflib import get_close_matches
 
 
 class DictationExplorer:
@@ -34,3 +35,5 @@ class DictationExplorer:
         self._words_dict.add(WordData(word, 0))
         with open(self._dict_file, 'a') as f:
             f.writelines([f'{word}:0'])
+
+

@@ -21,20 +21,18 @@ class SpellExplorer:
         """
         diff_index = SequenceMatcher(None, self._word, word_to_check.word) \
             .ratio()
-        if word_to_check.word == 'мама':
-            print('мама', word_to_check.popular_index, diff_index)
         if not self._substitution_words:
             self._substitution_words.append(
-                (word_to_check.popular_index, diff_index, word_to_check.word)
+                (diff_index, word_to_check.popular_index, word_to_check.word)
             )
 
-        for pop_index, di, word in self._substitution_words:
+        for di, pop_index, word in self._substitution_words:
             self._substitution_words.sort()
             if len(self._substitution_words) > self._count_substitution_words:
                 self._substitution_words.pop(0)
             if diff_index > di:
                 self._substitution_words.append(
-                    (word_to_check.popular_index,
-                     diff_index, word_to_check.word)
+                    (diff_index, word_to_check.popular_index,
+                     word_to_check.word)
                 )
                 break

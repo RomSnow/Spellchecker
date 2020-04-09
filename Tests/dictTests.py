@@ -2,12 +2,12 @@ import unittest
 from dictExplorer import DictationExplorer
 
 CORRECT_WORDS = ('мама', 'дом', 'помощь', 'нужда', 'пламя')
-INCORRECT_WORDS = ('мома', 'дйм', 'посмщь', 'нежда', 'плмя')
+INCORRECT_WORDS = ('мамо', 'дйм', 'посмщь', 'нежда', 'плмя')
 
 
 class MyTestCase(unittest.TestCase):
     dict_exp = DictationExplorer(
-        '/home/IRD-PC/Projects/Python/Spellchecker/Dictionaries/russian_dict.txt'
+        '/home/IRD-PC/Projects/Python/Spellchecker/Dictionaries/russian_dict_lite.txt'
     )
 
     def test_add_word(self):
