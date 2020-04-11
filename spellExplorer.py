@@ -15,15 +15,15 @@ class SpellExplorer:
         self._word = incorrect_word
         self._substitution_words = list()
 
-    def check_for_similarity(self, word_to_check: WordData):
+    def check_for_similarity(self, word_to_check: str, popular_index: float):
         """
         Сравнивает слова на схожесть, обновляет наиболее подходящее на замену
         """
-        diff_index = SequenceMatcher(None, self._word, word_to_check.word) \
+        diff_index = SequenceMatcher(None, self._word, word_to_check) \
             .ratio()
         if not self._substitution_words:
             self._substitution_words.append(
-                (diff_index, word_to_check.popular_index, word_to_check.word)
+                (diff_index, popular_index, word_to_check)
             )
 
         for di, pop_index, word in self._substitution_words:
@@ -32,7 +32,7 @@ class SpellExplorer:
                 self._substitution_words.pop(0)
             if diff_index > di:
                 self._substitution_words.append(
-                    (diff_index, word_to_check.popular_index,
-                     word_to_check.word)
+                    (diff_index, popular_index,
+                     word_to_check)
                 )
                 break

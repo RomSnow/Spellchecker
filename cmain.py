@@ -14,8 +14,9 @@ def main():
         for word in words:
             if dict_exp.check_word_in_dict(word):
                 continue
+            print(f'Incorrect word: {word}')
             substitution_words = dict_exp.find_most_similar_words(word)
-            print(f'{word} ?--> {" ".join(substitution_words)}'
+            print(f'{word} ?--> ({" ".join(substitution_words)})'
                   f' на строке {string_num}')
 
 
