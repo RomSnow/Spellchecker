@@ -1,5 +1,5 @@
-from wordData import WordData
-from spellExplorer import SpellExplorer
+from Spellchecker.wordData import WordData
+from Spellchecker.spellExplorer import SpellExplorer
 
 
 class DictationExplorer:
@@ -28,7 +28,16 @@ class DictationExplorer:
         """Находит наиболее схожее с исходным слово из словаря"""
         word_exp = SpellExplorer(incorrect_word)
 
-        for dict_word in self._words_dict:
+        if SPEED_FLAG:
+            print('SPEED')
+            current_dict = filter(
+                lambda _t: self._words_dict[_t].popular_index > 0,
+                self._words_dict
+            )
+        else:
+            current_dict = self._words_dict
+
+        for dict_word in current_dict:
             word_exp.check_for_similarity(dict_word,
                                           self._words_dict[dict_word])
 
@@ -36,7 +45,10 @@ class DictationExplorer:
 
     def add_word(self, word: str):
         """Добавление новго слова в словарь"""
-        self._words_dict[word] = 0
+        if self.check_word_in_dict(word):
+            raise AttributeError(word)
+
+        self._words_dict[word] = WordData(0, 0)
 
         with open(self._dict_file, 'a') as f:
-            f.writelines([f'{word}:0'])
+            f.writelines([f'{word}:0:0'])

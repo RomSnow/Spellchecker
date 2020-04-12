@@ -1,4 +1,5 @@
 import re
+from os import path
 
 
 class DocumentViewer:
@@ -7,6 +8,9 @@ class DocumentViewer:
     def __init__(self, text_name: str):
         self._text_name = text_name
         self._words_sep = re.compile(r'\W')
+
+        if not path.isfile(self._text_name):
+            raise FileNotFoundError
 
     def _get_lines(self):
         with open(self._text_name, 'r') as file:

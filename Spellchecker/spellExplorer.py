@@ -1,7 +1,5 @@
-from difflib import SequenceMatcher
-
-from levenshtein_distance import levenshtein_distance
-from wordData import WordData
+from Spellchecker.levenshtein_distance import levenshtein_distance
+from Spellchecker.wordData import WordData
 
 
 class SpellExplorer:

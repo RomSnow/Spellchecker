@@ -1,5 +1,5 @@
 import unittest
-from dictExplorer import DictationExplorer
+from Spellchecker.dictExplorer import DictationExplorer
 
 CORRECT_WORDS = ('мама', 'дом', 'помощь', 'нужда', 'пламя')
 INCORRECT_WORDS = ('мома', 'дйм', 'посмщь', 'нежда', 'плмя')
