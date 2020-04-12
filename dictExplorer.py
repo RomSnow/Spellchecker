@@ -1,6 +1,6 @@
-from spellExplorer import SpellExplorer
-from wordData import WordData
 from difflib import get_close_matches
+
+from spellExplorer import SpellExplorer
 
 
 class DictationExplorer:

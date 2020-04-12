@@ -1,6 +1,6 @@
 from difflib import SequenceMatcher
 
-from wordData import WordData
+from levenshtein_distance import levenshtein_distance
 
 
 class SpellExplorer:
@@ -8,31 +8,35 @@ class SpellExplorer:
 
     @property
     def substitution_words(self) -> tuple:
-        return tuple(t[2] for t in self._substitution_words)
+        return tuple(t[1] for t in self._substitution_words)
 
     def __init__(self, incorrect_word: str):
         self._count_substitution_words = 5
         self._word = incorrect_word
         self._substitution_words = list()
+        self._current_distance = 1000
 
     def check_for_similarity(self, word_to_check: str, popular_index: float):
         """
         Сравнивает слова на схожесть, обновляет наиболее подходящее на замену
         """
-        diff_index = SequenceMatcher(None, self._word, word_to_check) \
-            .ratio()
-        if not self._substitution_words:
-            self._substitution_words.append(
-                (diff_index, popular_index, word_to_check)
-            )
+        if abs(len(word_to_check) - len(self._word)) > 3:
+            return
 
-        for di, pop_index, word in self._substitution_words:
+        diff_distance = levenshtein_distance(word_to_check, self._word)
+
+        if diff_distance > self._current_distance:
+            return
+
+        elif diff_distance < self._current_distance:
+            self._substitution_words = [(popular_index, word_to_check)]
+            self._current_distance = diff_distance
+
+        else:
+            self._substitution_words.append((popular_index, word_to_check))
             self._substitution_words.sort()
-            if len(self._substitution_words) > self._count_substitution_words:
-                self._substitution_words.pop(0)
-            if diff_index > di:
-                self._substitution_words.append(
-                    (diff_index, popular_index,
-                     word_to_check)
-                )
-                break
+
+        if len(self._substitution_words) > self._count_substitution_words:
+            self._substitution_words.pop(0)
+
+

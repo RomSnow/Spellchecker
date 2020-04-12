@@ -10,11 +10,6 @@ class MyTestCase(unittest.TestCase):
         '/home/IRD-PC/Projects/Python/Spellchecker/Dictionaries/russian_dict.txt'
     )
 
-    def test_add_word(self):
-        self.dict_exp.add_word('new_word')
-        self.assertTrue(self.dict_exp.check_word_in_dict('new_word'),
-                        'Слово не добавлено')
-
     def test_check_word_in_dict(self):
         for w in CORRECT_WORDS:
             self.assertTrue(self.dict_exp.check_word_in_dict(w),
