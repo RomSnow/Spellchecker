@@ -8,12 +8,16 @@ class DictationExplorer:
     def __init__(self, dict_file: str):
         self._dict_file = dict_file
         self._words_dict = dict()
-
         with open(dict_file, 'r') as f:
             for line in f:
                 line_data = line.strip('\n').split(':')
                 word_data = WordData(int(line_data[1]), float(line_data[2]))
                 self._words_dict[line_data[0]] = word_data
+
+        self._words_dict_lite = frozenset(
+            filter(lambda _t: self._words_dict[_t].popular_index > 0,
+                   self._words_dict)
+        )
 
     def check_word_in_dict(self, search_word: str) -> bool:
         """Проверяет вхождение слова в словарь"""
@@ -24,16 +28,13 @@ class DictationExplorer:
 
         return False
 
-    def find_most_similar_words(self, incorrect_word: str) -> tuple:
+    def find_most_similar_words(self, incorrect_word: str,
+                                speed_flag=False) -> tuple:
         """Находит наиболее схожее с исходным слово из словаря"""
         word_exp = SpellExplorer(incorrect_word)
 
-        if SPEED_FLAG:
-            print('SPEED')
-            current_dict = filter(
-                lambda _t: self._words_dict[_t].popular_index > 0,
-                self._words_dict
-            )
+        if speed_flag:
+            current_dict = self._words_dict_lite
         else:
             current_dict = self._words_dict
 

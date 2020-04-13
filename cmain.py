@@ -1,6 +1,6 @@
 import sys
 
-from Spellchecker.Settings import Settings
+from Spellchecker.conf import *
 from Spellchecker.dictExplorer import DictationExplorer
 from Spellchecker.documentViewer import DocumentViewer
 from Spellchecker.consoleComands import exec_command
@@ -8,14 +8,13 @@ from Spellchecker.consoleComands import exec_command
 
 def main():
     args = sys.argv[1:]
-    settings = Settings()
-
-    if exec_command(settings, args):
+    conf = Configuration("Dictionaries/russian_dict.txt")
+    if exec_command(conf, args):
         return
 
     text_file = args[len(args) - 1]
     try:
-        dict_exp = DictationExplorer('Dictionaries/russian_dict.txt')
+        dict_exp = DictationExplorer(conf.dictation_name)
         doc_view = DocumentViewer(text_file)
     except FileNotFoundError:
         print('Файл не найден')
@@ -30,7 +29,9 @@ def main():
             if dict_exp.check_word_in_dict(word):
                 continue
 
-            substitution_words = dict_exp.find_most_similar_words(word)
+            substitution_words = dict_exp.find_most_similar_words(
+                word, conf.speed_flag
+            )
             print(f'{word} ?--> ({" ".join(substitution_words)})'
                   f' на строке {string_num}')
 

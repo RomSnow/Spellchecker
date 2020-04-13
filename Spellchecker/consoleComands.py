@@ -1,10 +1,10 @@
 """Содержит функции для обработки ключей консоли и настройки"""
 from typing import List
 from os import path
-from Spellchecker.Settings import Settings
+from Spellchecker.conf import *
+from Spellchecker.dictExplorer import DictationExplorer
 
 _ERROR_ARGS_STRING = 'Неверные аргументы! Используйте -h, --help для справки'
-settings = Settings()
 
 
 def _help_view():
@@ -15,19 +15,23 @@ def _help_view():
 
 
 def _speed_flag():
-     pass
+    configuration.speed_flag = True
 
 
-def _add_word(*words, dict_exp):
+def _add_word(*words):
+    if len(words) == 0:
+        raise TypeError
+
+    dict_exp = DictationExplorer(configuration.dictation_name)
     for word in words:
 
         try:
             dict_exp.add_word(word)
+            print('Cлова успешно добавлено')
 
         except AttributeError:
             print(f'Слово {word} уже в словаре')
 
-    print('Cлова успешно добавлено')
     return True
 
 
@@ -40,12 +44,13 @@ _command_dict = {
 }
 
 
-def exec_command(settings: Settings, args: List[str]) -> bool:
+def exec_command(conf: Configuration, args: List[str]) -> bool:
     """
     Настраивает работу программы по ключам
     Возвращает True, если программа должна завершиться
     """
-    settings = settings
+    global configuration
+    configuration = conf
 
     if len(args) == 0:
         print(_ERROR_ARGS_STRING)
@@ -54,8 +59,10 @@ def exec_command(settings: Settings, args: List[str]) -> bool:
     if path.isfile(args[-1]):
         args = args[:-1]
 
+    if len(args) == 0:
+        return False
+
     arg = args[0]
-    is_exit = False
 
     if not arg.startswith('-'):
         print(_ERROR_ARGS_STRING)
@@ -66,7 +73,12 @@ def exec_command(settings: Settings, args: List[str]) -> bool:
     if arg.startswith('-'):
         try:
             return _command_dict[arg](*args[1:])
-        except KeyError or TypeError:
+
+        except KeyError:
+            print(_ERROR_ARGS_STRING)
+            return True
+
+        except TypeError:
             print(_ERROR_ARGS_STRING)
             return True
 
@@ -78,6 +90,7 @@ def exec_command(settings: Settings, args: List[str]) -> bool:
         for a in arg:
             try:
                 return _command_dict[a]()
+
             except KeyError:
                 print(_ERROR_ARGS_STRING)
                 return True
