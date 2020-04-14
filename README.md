@@ -1,2 +1,4 @@
-# Spellchecker
-Program for checking spell in a text
+# Спеллчкер
+Автор: Ивашкин Роман (ivashkin.roma2001@yandex.ru)
+
+h1 Описание
