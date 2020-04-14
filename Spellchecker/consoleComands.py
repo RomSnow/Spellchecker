@@ -8,7 +8,7 @@ _ERROR_ARGS_STRING = 'Неверные аргументы! Используйт�
 
 
 def _help_view():
-    with open('README.md') as f:
+    with open('chelp.txt') as f:
         print(f.read())
 
     return True
