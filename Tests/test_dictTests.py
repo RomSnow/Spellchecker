@@ -1,13 +1,18 @@
 import unittest
-from Spellchecker.dictExplorer import DictationExplorer
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
+from spellchecker.dictExplorer import DictationExplorer
 
 CORRECT_WORDS = ('мама', 'дом', 'помощь', 'нужда', 'пламя')
 INCORRECT_WORDS = ('мома', 'дйм', 'посмщь', 'нежда', 'плмя')
 
 
-class MyTestCase(unittest.TestCase):
+class DictTests(unittest.TestCase):
     dict_exp = DictationExplorer(
-        '/Dictionaries/russian_dict.txt'
+        '/home/IRD-PC/Projects/Python/Spellchecker/Dictionaries/russian_dict.txt'
     )
 
     def test_check_word_in_dict(self):

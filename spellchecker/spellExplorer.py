@@ -1,5 +1,5 @@
-from Spellchecker.levenshtein_distance import levenshtein_distance
-from Spellchecker.wordData import WordData
+from spellchecker.levenshtein_distance import levenshtein_distance
+from spellchecker.wordData import WordData
 
 
 class SpellExplorer:

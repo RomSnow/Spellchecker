@@ -1,5 +1,5 @@
-from Spellchecker.wordData import WordData
-from Spellchecker.spellExplorer import SpellExplorer
+from spellchecker.wordData import WordData
+from spellchecker.spellExplorer import SpellExplorer
 
 
 class DictationExplorer:
