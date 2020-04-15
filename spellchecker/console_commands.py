@@ -2,7 +2,7 @@
 from typing import List
 from os import path
 from spellchecker.conf import *
-from spellchecker.dictExplorer import DictationExplorer
+from spellchecker.dict_explorer import DictationExplorer
 
 _ERROR_ARGS_STRING = 'Неверные аргументы! Используйте -h, --help для справки'
 

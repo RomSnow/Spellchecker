@@ -1,9 +1,9 @@
 import sys
 
 from spellchecker.conf import *
-from spellchecker.dictExplorer import DictationExplorer
-from spellchecker.documentViewer import DocumentViewer
-from spellchecker.consoleComands import exec_command
+from spellchecker.dict_explorer import DictationExplorer
+from spellchecker.document_viewer import DocumentViewer
+from spellchecker.console_commands import exec_command
 
 
 def main():
