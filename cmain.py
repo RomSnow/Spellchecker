@@ -3,7 +3,6 @@
 Для получения информации по использованию программы
 следует обратиться к справке -h, --help"""
 import sys
-import os
 
 from Spellchecker.conf import Configuration
 from Spellchecker.dict_explorer import DictationExplorer
