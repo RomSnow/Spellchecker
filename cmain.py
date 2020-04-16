@@ -3,11 +3,12 @@
 Для получения информации по использованию программы
 следует обратиться к справке -h, --help"""
 import sys
+import os
 
-from spellchecker.conf import Configuration
-from spellchecker.dict_explorer import DictationExplorer
-from spellchecker.document_viewer import DocumentViewer
-from spellchecker.console_commands import exec_command
+from Spellchecker.conf import Configuration
+from Spellchecker.dict_explorer import DictationExplorer
+from Spellchecker.document_viewer import DocumentViewer
+from Spellchecker.console_commands import exec_command
 
 
 def main():

@@ -1,6 +1,6 @@
 """Содержит инструменты для поиска ошибок"""
-from spellchecker.levenshtein_distance import levenshtein_distance
-from spellchecker.word_data import WordData
+from Spellchecker.levenshtein_distance import levenshtein_distance
+from Spellchecker.word_data import WordData
 
 
 class SpellExplorer:

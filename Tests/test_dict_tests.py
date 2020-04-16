@@ -5,8 +5,8 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-from spellchecker.dict_explorer import DictationExplorer
-from spellchecker.levenshtein_distance import *
+from Spellchecker.dict_explorer import DictationExplorer
+from Spellchecker.levenshtein_distance import *
 
 CORRECT_WORDS = ('мама', 'дом', 'помощь', 'нужда', 'пламя')
 INCORRECT_WORDS = ('мома', 'дйм', 'посмщь', 'нежда', 'плмя')

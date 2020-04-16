@@ -1,8 +1,8 @@
 """Содержит функции для обработки ключей консоли и настройки"""
 from typing import List
 from os import path
-from spellchecker.conf import Configuration
-from spellchecker.dict_explorer import DictationExplorer
+from Spellchecker.conf import Configuration
+from Spellchecker.dict_explorer import DictationExplorer
 
 _ERROR_ARGS_STRING = 'Неверные аргументы! Используйте -h, --help для справки'
 
