@@ -10,13 +10,13 @@ def levenshtein_distance(first_word: str, second_word: str) -> int:
 
     previous_row = range(len(second_word) + 1)
 
-    for i, c1 in enumerate(first_word):
+    for i, letter_1 in enumerate(first_word):
         current_row = [i + 1]
 
-        for j, c2 in enumerate(second_word):
+        for j, letter_2 in enumerate(second_word):
             insertions = previous_row[j + 1] + 1
             deletions = current_row[j] + 1
-            substitutions = previous_row[j] + (c1 != c2)
+            substitutions = previous_row[j] + (letter_1 != letter_2)
 
             current_row.append(min(insertions, deletions, substitutions))
 

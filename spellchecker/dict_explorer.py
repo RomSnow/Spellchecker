@@ -9,8 +9,8 @@ class DictationExplorer:
     def __init__(self, dict_file: str):
         self._dict_file = dict_file
         self._words_dict = dict()
-        with open(dict_file, 'r') as f:
-            for line in f:
+        with open(dict_file, 'r') as file:
+            for line in file:
                 line_data = line.strip('\n').split(':')
                 word_data = WordData(int(line_data[1]), float(line_data[2]))
                 self._words_dict[line_data[0]] = word_data
@@ -52,5 +52,5 @@ class DictationExplorer:
 
         self._words_dict[word] = WordData(0, 0)
 
-        with open(self._dict_file, 'a') as f:
-            f.writelines([f'{word}:0:0'])
+        with open(self._dict_file, 'a') as file:
+            file.writelines([f'{word}:0:0'])

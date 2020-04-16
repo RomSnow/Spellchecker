@@ -39,7 +39,7 @@ class SpellExplorer:
         if diff_distance > self._current_distance:
             return
 
-        elif diff_distance < self._current_distance:
+        if diff_distance < self._current_distance:
             self._substitution_words = [
                 (word_data.popular_index, word_to_check)
             ]

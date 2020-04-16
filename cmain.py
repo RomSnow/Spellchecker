@@ -4,13 +4,14 @@
 следует обратиться к справке -h, --help"""
 import sys
 
-from spellchecker.conf import *
+from spellchecker.conf import Configuration
 from spellchecker.dict_explorer import DictationExplorer
 from spellchecker.document_viewer import DocumentViewer
 from spellchecker.console_commands import exec_command
 
 
 def main():
+    """Main function"""
     args = sys.argv[1:]
     conf = Configuration("Dictionaries/russian_dict.txt")
     if exec_command(conf, args):

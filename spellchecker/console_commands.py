@@ -1,28 +1,28 @@
 """Содержит функции для обработки ключей консоли и настройки"""
 from typing import List
 from os import path
-from spellchecker.conf import *
+from spellchecker.conf import Configuration
 from spellchecker.dict_explorer import DictationExplorer
 
 _ERROR_ARGS_STRING = 'Неверные аргументы! Используйте -h, --help для справки'
 
 
 def _help_view():
-    with open('chelp.txt') as f:
-        print(f.read())
+    with open('chelp.txt') as file:
+        print(file.read())
 
     return True
 
 
 def _speed_flag():
-    configuration.speed_flag = True
+    CONFIGURATION.speed_flag = True
 
 
 def _add_words(*words):
     if len(words) == 0:
         raise TypeError
 
-    dict_exp = DictationExplorer(configuration.dictation_name)
+    dict_exp = DictationExplorer(CONFIGURATION.dictation_name)
     for word in words:
 
         try:
@@ -36,7 +36,7 @@ def _add_words(*words):
 
 
 # Словарь с ключами
-_command_dict = {
+_COMMAND_DICT = {
     '-help': _help_view,
     'h': _help_view,
     '-speed': _speed_flag,
@@ -49,8 +49,8 @@ def exec_command(conf: Configuration, args: List[str]) -> bool:
     """Настраивает работу программы по ключам
 
     Возвращает True, если программа должна завершиться"""
-    global configuration
-    configuration = conf
+    global CONFIGURATION
+    CONFIGURATION = conf
 
     if len(args) == 0:
         print(_ERROR_ARGS_STRING)
@@ -71,26 +71,27 @@ def exec_command(conf: Configuration, args: List[str]) -> bool:
     arg = arg[1:]
 
     if arg.startswith('-'):
-        try:
-            return _command_dict[arg](*args[1:])
+        return _do_command(arg, args[1:])
 
-        except KeyError:
-            print(_ERROR_ARGS_STRING)
-            return True
+    is_exit = False
+    for letter in arg:
+        is_exit = _do_command(letter, args[1:])
+    return is_exit
 
-        except TypeError:
-            print(_ERROR_ARGS_STRING)
-            return True
 
-        except AttributeError as e:
-            print(f'Слова {",".join(e.args)} уже есть в словаре')
-            return True
+def _do_command(command: str, args) -> bool:
+    """Выполняет действия в соостветсии с ключом"""
+    try:
+        return _COMMAND_DICT[command](*args)
 
-    else:
-        for a in arg:
-            try:
-                return _command_dict[a]()
+    except KeyError:
+        print(_ERROR_ARGS_STRING)
+        return True
 
-            except KeyError:
-                print(_ERROR_ARGS_STRING)
-                return True
+    except TypeError:
+        print(_ERROR_ARGS_STRING)
+        return True
+
+    except AttributeError as expt:
+        print(f'Слова {",".join(expt.args)} уже есть в словаре')
+        return True
