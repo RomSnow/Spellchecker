@@ -8,7 +8,7 @@ _ERROR_ARGS_STRING = 'Неверные аргументы! Используйт�
 
 
 def _help_view():
-    with open('chelp.txt') as file:
+    with open('chelp.txt', 'r', encoding='utf-8') as file:
         print(file.read())
 
     return True
