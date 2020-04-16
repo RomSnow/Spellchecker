@@ -1,3 +1,4 @@
+"""Включает в себя класс для взаимодействия со словарем"""
 from spellchecker.word_data import WordData
 from spellchecker.spell_explorer import SpellExplorer
 

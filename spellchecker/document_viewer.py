@@ -1,3 +1,4 @@
+"""Содержит класс для работы с текстом"""
 import re
 from os import path
 

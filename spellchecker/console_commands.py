@@ -18,7 +18,7 @@ def _speed_flag():
     configuration.speed_flag = True
 
 
-def _add_word(*words):
+def _add_words(*words):
     if len(words) == 0:
         raise TypeError
 
@@ -35,20 +35,20 @@ def _add_word(*words):
     return True
 
 
+# Словарь с ключами
 _command_dict = {
     '-help': _help_view,
     'h': _help_view,
     '-speed': _speed_flag,
     's': _speed_flag,
-    '-add': _add_word
+    '-add': _add_words
 }
 
 
 def exec_command(conf: Configuration, args: List[str]) -> bool:
-    """
-    Настраивает работу программы по ключам
-    Возвращает True, если программа должна завершиться
-    """
+    """Настраивает работу программы по ключам
+
+    Возвращает True, если программа должна завершиться"""
     global configuration
     configuration = conf
 

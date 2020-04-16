@@ -1,7 +1,7 @@
 """Реализация алгоритма Левенштейна для сравнения слов"""
 
 
-def levenshtein_distance(first_word, second_word):
+def levenshtein_distance(first_word: str, second_word: str) -> int:
     if len(first_word) < len(second_word):
         return levenshtein_distance(second_word, first_word)
 
