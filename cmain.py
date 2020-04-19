@@ -4,6 +4,7 @@
 следует обратиться к справке -h, --help"""
 import sys
 
+from progressbar import ProgressBar
 from Spellchecker.conf import Configuration
 from Spellchecker.dict_explorer import DictationExplorer
 from Spellchecker.document_viewer import DocumentViewer
@@ -25,11 +26,14 @@ def main():
         print('Файл не найден')
         return
 
-    string_num = 0
-    for words in doc_view.words_on_line:
-        string_num += 1
+    out_str = ""
+    main_bar = ProgressBar(maxval=doc_view.lines_count).start()
+    line_bar = ProgressBar()
 
-        for word in words:
+    for line_index, words in enumerate(doc_view.words_on_line):
+        line_bar.start()
+
+        for word in line_bar(words):
 
             if dict_exp.check_word_in_dict(word):
                 continue
@@ -37,8 +41,14 @@ def main():
             substitution_words = dict_exp.find_most_similar_words(
                 word, conf.speed_flag
             )
-            print(f'{word} ?--> ({" ".join(substitution_words)})'
-                  f' на строке {string_num}')
+            out_str += f'{word} ?--> ({" ".join(substitution_words)}) ' \
+                       f'на строке {line_index + 1}\n'
+
+        line_bar.finish()
+        main_bar.update(line_index)
+
+    main_bar.finish()
+    print(out_str)
 
 
 if __name__ == '__main__':

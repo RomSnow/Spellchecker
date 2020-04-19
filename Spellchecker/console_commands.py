@@ -1,6 +1,7 @@
 """Содержит функции для обработки ключей консоли и настройки"""
 from typing import List
 from os import path
+
 from Spellchecker.conf import Configuration
 from Spellchecker.dict_explorer import DictationExplorer
 

@@ -9,6 +9,7 @@ class DocumentViewer:
     def __init__(self, text_name: str):
         self._text_name = text_name
         self._words_sep = re.compile(r'\W')
+        self._lines_count = 0
 
         if not path.isfile(self._text_name):
             raise FileNotFoundError
@@ -25,3 +26,12 @@ class DocumentViewer:
                 lambda s: s != '',
                 map(lambda s: s.lower(), re.split(self._words_sep, line))
             )
+
+    @property
+    def lines_count(self) -> int:
+        if self._lines_count == 0:
+            with open(self._text_name, 'r') as file:
+                for line in file:
+                    self._lines_count += 1
+
+        return self._lines_count
