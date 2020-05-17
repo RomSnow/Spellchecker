@@ -1,6 +1,5 @@
 """Включает в себя класс для взаимодействия со словарем"""
-from Spellchecker.word_data import WordData
-from Spellchecker.spell_explorer import SpellExplorer
+from Spellchecker.fbtrie import FBTrie
 
 
 class DictationExplorer:
@@ -8,49 +7,33 @@ class DictationExplorer:
 
     def __init__(self, dict_file: str):
         self._dict_file = dict_file
-        self._words_dict = dict()
+        self._words_fb = FBTrie()
+        self._words_dict = set()
         with open(dict_file, 'r', encoding='utf-8') as file:
             for line in file:
                 line_data = line.strip('\n').split(':')
-                word_data = WordData(int(line_data[1]), float(line_data[2]))
-                self._words_dict[line_data[0]] = word_data
-
-        self._words_dict_lite = frozenset(
-            filter(lambda _t: self._words_dict[_t].popular_index > 0,
-                   self._words_dict)
-        )
+                self._words_fb.insert(line_data[0])
+                self._words_dict.add(line_data[0])
 
     def check_word_in_dict(self, search_word: str) -> bool:
         """Проверяет вхождение слова в словарь"""
-        for dict_word in self._words_dict:
-
-            if search_word == dict_word:
-                return True
-
-        return False
+        return search_word in self._words_dict
 
     def find_most_similar_words(self, incorrect_word: str,
-                                speed_flag=False) -> tuple:
+                                count: int) -> tuple:
         """Находит наиболее схожее с исходным слово из словаря"""
-        word_exp = SpellExplorer(incorrect_word)
-
-        if speed_flag:
-            current_dict = self._words_dict_lite
-        else:
-            current_dict = self._words_dict
-
-        for dict_word in current_dict:
-            word_exp.check_for_similarity(dict_word,
-                                          self._words_dict[dict_word])
-
-        return word_exp.substitution_words
+        found = self._words_fb.fuzzy(incorrect_word, 1)
+        return tuple(
+            i[0] for i in sorted(found, key=lambda _t: _t[1])
+        )[:count]
 
     def add_word(self, word: str):
         """Добавление новго слова в словарь"""
         if self.check_word_in_dict(word):
             raise AttributeError(word)
 
-        self._words_dict[word] = WordData(0, 0)
+        self._words_dict.add(word)
+        self._words_fb.insert(word)
 
         with open(self._dict_file, 'a', encoding='utf-8') as file:
-            file.writelines([f'{word}:0:0'])
+            file.writelines([f'{word}'])
