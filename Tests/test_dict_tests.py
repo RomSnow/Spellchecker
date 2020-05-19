@@ -5,6 +5,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
+
 from Spellchecker.dict_explorer import DictationExplorer
 
 CORRECT_WORDS = ('мама', 'дом', 'помощь', 'нужда', 'пламя')
@@ -19,8 +20,6 @@ class DictTests(unittest.TestCase):
 
     def test_check_word_in_dict(self):
         """Проверяет корректность нахождения слова в словаре"""
-        for i in range(10000000):
-            self.dict_exp.check_word_in_dict('прив')
         for w in CORRECT_WORDS:
             self.assertTrue(self.dict_exp.check_word_in_dict(w),
                             f'Слово не в словаре {w}')
@@ -38,6 +37,13 @@ class DictTests(unittest.TestCase):
                 f'Для слова {INCORRECT_WORDS[i]} найдено'
                 f' {self.dict_exp.find_most_similar_words(INCORRECT_WORDS[i], 3)}'
             )
+
+    def test_get_most_popular(self):
+        l = (('мама', 1), ('дом', 1), ('крыша', 4),
+             ('наковальня', 2), ('марионетка', 1), ('империализм', 3))
+
+        self.assertEqual(('дом', 'мама', 'марионетка'),
+                         self.dict_exp._get_most_popular(l, 3))
 
 
 if __name__ == '__main__':
