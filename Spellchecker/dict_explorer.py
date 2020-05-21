@@ -22,9 +22,10 @@ class DictationExplorer:
         return search_word in self._words_dict
 
     def multiproc_fmsw(self, incorrect_word: str,
-                       count: int, queue: Queue):
+                       count: int, queue: Queue, line: int):
         """Оболочка для использования при многопроцессной реализации"""
-        queue.put(self.find_most_similar_words(incorrect_word, count))
+        queue.put((self.find_most_similar_words(incorrect_word, count),
+                  incorrect_word, line))
 
     def find_most_similar_words(self, incorrect_word: str,
                                 count: int) -> tuple:

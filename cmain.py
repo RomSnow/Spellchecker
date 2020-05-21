@@ -37,14 +37,19 @@ def main():
                 continue
 
             proc = Process(target=dict_exp.multiproc_fmsw,
-                           args=(word, 5, proc_queue))
+                           args=(word, 5, proc_queue, line_index + 1))
             proc.start()
-            processes.append((proc, word, line_index + 1))
+            processes.append(proc)
 
-    for proc_data in processes:
-        print(f"{proc_data[1]} ?--> ({', '.join(proc_queue.get())}) "
-              f"на строке {proc_data[2]}")
-        proc_data[0].join()
+    found_words = list()
+    for proc in processes:
+        found_words.append(proc_queue.get())
+        proc.join()
+
+    for word_data in sorted(found_words,
+                            key=lambda _t: _t[2]):
+        print(f"{word_data[1]} ?--> ({', '.join(word_data[0])}) "
+              f"на строке {word_data[2]}")
 
 
 if __name__ == '__main__':
