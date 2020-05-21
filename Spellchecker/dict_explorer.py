@@ -1,4 +1,6 @@
 """Включает в себя класс для взаимодействия со словарем"""
+from multiprocessing import Queue
+
 from Spellchecker.fbtrie import Trie, FBTrie
 
 
@@ -19,6 +21,11 @@ class DictationExplorer:
         """Проверяет вхождение слова в словарь"""
         return search_word in self._words_dict
 
+    def multiproc_fmsw(self, incorrect_word: str,
+                       count: int, queue: Queue):
+        """Оболочка для использования при многопроцессной реализации"""
+        queue.put(self.find_most_similar_words(incorrect_word, count))
+
     def find_most_similar_words(self, incorrect_word: str,
                                 count: int) -> tuple:
         """Находит наиболее схожее с исходным слово из словаря"""
@@ -30,7 +37,7 @@ class DictationExplorer:
         if self.check_word_in_dict(word):
             raise AttributeError(word)
 
-        self._words_dict.add(word)
+        self._words_dict[word] = 0
         self._words_fb.insert(word)
 
         with open(self._dict_file, 'a', encoding='utf-8') as file:

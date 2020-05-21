@@ -3,6 +3,7 @@
 Для получения информации по использованию программы
 следует обратиться к справке -h, --help"""
 import sys
+from multiprocessing import Process, Queue
 
 from Spellchecker.conf import Configuration
 from Spellchecker.dict_explorer import DictationExplorer
@@ -14,6 +15,7 @@ def main():
     """Main function"""
     args = sys.argv[1:]
     conf = Configuration("Dictionaries/russian_dict.txt")
+
     if exec_command(conf, args):
         return
 
@@ -24,7 +26,9 @@ def main():
     except FileNotFoundError:
         print('Файл не найден')
         return
-    out_str = ''
+
+    processes = list()
+    proc_queue = Queue()
     for line_index, words in enumerate(doc_view.words_on_line):
 
         for word in words:
@@ -32,13 +36,17 @@ def main():
             if dict_exp.check_word_in_dict(word):
                 continue
 
-            substitution_words = dict_exp.find_most_similar_words(
-                word, 5
-            )
-            out_str += f'{word} ?--> ({" ".join(substitution_words)}) ' \
-                       f'на строке {line_index + 1}\n'
+            proc = Process(target=dict_exp.multiproc_fmsw,
+                           args=(word, 5, proc_queue))
+            proc.start()
+            processes.append((proc, word, line_index + 1))
 
-    print(out_str)
+    for proc_data in processes:
+        print(f"{proc_data[1]} ?--> ({', '.join(proc_queue.get())}) "
+              f"на строке {proc_data[2]}")
+        proc_data[0].join()
+
+
 
 
 if __name__ == '__main__':
