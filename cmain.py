@@ -47,7 +47,5 @@ def main():
         proc_data[0].join()
 
 
-
-
 if __name__ == '__main__':
     main()
