@@ -10,7 +10,7 @@ class DocumentViewer(FileManager):
 
     def __init__(self, text_name: str):
         self._text_name = text_name
-        self._words_sep = re.compile(r'\W')
+        self._words_sep = re.compile(r'\s+[^a-zA-Zа-яА-Я0-9]?')
         self._lines_count = 0
 
         if not path.isfile(self._text_name):

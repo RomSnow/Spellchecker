@@ -15,12 +15,15 @@ class DictationExplorer(FileManager):
         self._words_fb = Trie()
         self._words_dict = dict()
         self.bar = Bar('Load Dictionary', max=self.count_lines(dict_file))
+
         with open(dict_file, 'r', encoding='utf-8') as file:
             for line in file:
+
                 line_data = line.strip('\n').split(':')
                 self._words_fb.insert(line_data[0])
                 self._words_dict[line_data[0]] = float(line_data[1])
                 self.bar.next()
+
         self.bar.finish()
 
     def check_word_in_dict(self, search_word: str) -> bool:
