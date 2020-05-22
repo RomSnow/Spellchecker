@@ -2,8 +2,10 @@
 import re
 from os import path
 
+from Spellchecker.file_manager import FileManager
 
-class DocumentViewer:
+
+class DocumentViewer(FileManager):
     """Содержит инструментарий для работы с текстом"""
 
     def __init__(self, text_name: str):
@@ -29,9 +31,4 @@ class DocumentViewer:
 
     @property
     def lines_count(self) -> int:
-        if self._lines_count == 0:
-            with open(self._text_name, 'r') as file:
-                for line in file:
-                    self._lines_count += 1
-
-        return self._lines_count
+        return self.count_lines(self._text_name)

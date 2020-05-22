@@ -1,9 +1,12 @@
+#!./venv/bin/python
 """Реализация консольной версии программы Spellchecker
 
 Для получения информации по использованию программы
 следует обратиться к справке -h, --help"""
 import sys
 from multiprocessing import Process, Queue
+
+from progress.bar import Bar
 
 from Spellchecker.conf import Configuration
 from Spellchecker.dict_explorer import DictationExplorer
@@ -29,6 +32,8 @@ def main():
 
     processes = list()
     proc_queue = Queue()
+
+    line_bar = Bar('Text Processing', max=doc_view.lines_count)
     for line_index, words in enumerate(doc_view.words_on_line):
 
         for word in words:
@@ -40,6 +45,10 @@ def main():
                            args=(word, 5, proc_queue, line_index + 1))
             proc.start()
             processes.append(proc)
+            line_bar.next()
+
+    line_bar.finish()
+    print()
 
     found_words = list()
     for proc in processes:

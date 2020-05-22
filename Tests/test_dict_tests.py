@@ -1,4 +1,5 @@
 """Тесты на работу словаря"""
+import subprocess
 import unittest
 import sys
 import os
@@ -44,6 +45,12 @@ class DictTests(unittest.TestCase):
 
         self.assertEqual(('дом', 'мама', 'марионетка'),
                          self.dict_exp._get_most_popular(l, 3))
+
+    def test_count_line(self):
+        self.assertEqual(int(subprocess.check_output(
+            f"wc -l {__file__}",
+            shell=True
+        ).split()[0]), self.dict_exp.count_lines(__file__))
 
 
 if __name__ == '__main__':
