@@ -52,6 +52,16 @@ class DictTests(unittest.TestCase):
             shell=True
         ).split()[0]), self.dict_exp.count_lines(__file__))
 
+    def test_stuck_words(self):
+        self.assertEqual(
+            ('дом', 'лестница'),
+            self.dict_exp.check_stuck_words('домлестница')
+                         )
+        self.assertEqual(
+            None,
+            self.dict_exp.check_stuck_words('афарокр')
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -10,7 +10,7 @@ class DocumentViewer(FileManager):
 
     def __init__(self, text_name: str):
         self._text_name = text_name
-        self._words_sep = re.compile(r'\s+[^a-zA-Zа-яА-Я0-9]?')
+        self._words_sep = re.compile(r'[a-zA-Zа-яА-Яё]*[-a-zA-Zа-яА-Я]?')
         self._lines_count = 0
 
         if not path.isfile(self._text_name):
@@ -26,7 +26,7 @@ class DocumentViewer(FileManager):
         for line in self._get_lines():
             yield filter(
                 lambda s: s != '',
-                map(lambda s: s.lower(), re.split(self._words_sep, line))
+                map(lambda s: s.lower(), re.findall(self._words_sep, line))
             )
 
     @property

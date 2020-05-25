@@ -73,6 +73,23 @@ class DictationExplorer(FileManager):
 
         return tuple(i[2] for i in pop_words)
 
+    def check_stuck_words(self, incorrect_word: str):
+        """
+        Проверяет на слипшиеся слова
+
+        Если да, то возвращает пару слов,
+        если нет, то None.
+        """
+        for dict_word in filter(lambda _t: self._words_dict[_t] != 0,
+                                self._words_dict.keys()):
+            if incorrect_word.startswith(dict_word):
+                second_word = incorrect_word[len(dict_word):]
+
+                if second_word in self._words_dict:
+                    return dict_word, second_word
+
+        return None
+
     @staticmethod
     def _sort_words(words: list) -> list:
         sorted_list = list()

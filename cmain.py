@@ -32,6 +32,7 @@ def main():
 
     processes = list()
     proc_queue = Queue()
+    found_words = list()
 
     line_bar = Bar('Text Processing', max=doc_view.lines_count)
     for line_index, words in enumerate(doc_view.words_on_line):
@@ -41,16 +42,23 @@ def main():
             if dict_exp.check_word_in_dict(word):
                 continue
 
+            stuck_words = dict_exp.check_stuck_words(word)
+
+            if stuck_words is not None:
+                found_words.append((
+                    stuck_words, word, line_index + 1
+                ))
+                continue
+
             proc = Process(target=dict_exp.multiproc_fmsw,
                            args=(word, 5, proc_queue, line_index + 1))
             proc.start()
             processes.append(proc)
-            line_bar.next()
+        line_bar.next()
 
     line_bar.finish()
     print()
 
-    found_words = list()
     for proc in processes:
         found_words.append(proc_queue.get())
         proc.join()
