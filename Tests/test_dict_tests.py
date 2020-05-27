@@ -1,11 +1,8 @@
 """Тесты на работу словаря"""
 import subprocess
 import unittest
-import sys
 import os
 
-sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             os.path.pardir))
 
 from Spellchecker.dict_explorer import DictationExplorer
 
@@ -16,7 +13,7 @@ LEVENSHTEIN_DIST = (1, 1, 2, 1, 1)
 
 class DictTests(unittest.TestCase):
     dict_exp = DictationExplorer(
-        '/Dictionaries/russian_dict.dict'
+        f'{os.path.dirname(__file__)}/../Dictionaries/russian_dict.dict'
     )
 
     def test_check_word_in_dict(self):
