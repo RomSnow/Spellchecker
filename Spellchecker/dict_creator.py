@@ -23,6 +23,8 @@ class DictationCreator:
             for word, popular in words_dict.items():
                 file.write(f'{word}:{popular / len(words_dict) * 10000}\n')
 
+        print(f'Dictation {file_out}.dict created')
+
 
 if __name__ == '__main__':
     creator = DictationCreator()

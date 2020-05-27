@@ -20,6 +20,10 @@ class DictationExplorer(FileManager):
             for line in file:
 
                 line_data = line.strip('\n').split(':')
+
+                if line_data[1] is None or line_data[1] == '':
+                    raise AttributeError
+
                 self._words_fb.insert(line_data[0])
                 self._words_dict[line_data[0]] = float(line_data[1])
                 self.bar.next()
@@ -42,8 +46,13 @@ class DictationExplorer(FileManager):
         found = self._words_fb.fuzzy(incorrect_word, 2)
         return self._get_most_popular(set(found), count)
 
-    def add_word(self, word: str):
-        """Добавление новго слова в словарь"""
+    def add_words(self, words: list):
+        """Добавление новых слов в словарь"""
+        for word in words:
+            self._add_word(word)
+        print('Words added!')
+
+    def _add_word(self, word: str):
         if self.check_word_in_dict(word):
             raise AttributeError(word)
 

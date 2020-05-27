@@ -11,23 +11,38 @@ from progress.bar import Bar
 from Spellchecker.conf import Configuration
 from Spellchecker.dict_explorer import DictationExplorer
 from Spellchecker.document_viewer import DocumentViewer
-from Spellchecker.console_commands import exec_command
+from Spellchecker.console_commands import ArgsParser
+from Spellchecker.dict_creator import DictationCreator
 
 
 def main():
     """Main function"""
-    args = sys.argv[1:]
-    conf = Configuration("Dictionaries/russian_dict.txt")
+    parser = ArgsParser(sys.argv[1:])
+    conf = parser.parse()
 
-    if exec_command(conf, args):
+    if conf.is_create_mode:
+        dict_creator = DictationCreator()
+        dict_creator.create(*conf.items)
         return
 
-    text_file = args[len(args) - 1]
     try:
         dict_exp = DictationExplorer(conf.dictation_name)
-        doc_view = DocumentViewer(text_file)
     except FileNotFoundError:
-        print('Файл не найден')
+        print(conf.dictation_name)
+        print('\nСловарь не найден!')
+        return
+    except Exception:
+        print('\nНекорректный словарь!')
+        return
+
+    if conf.is_add_mode:
+        dict_exp.add_words(conf.items)
+        return
+
+    try:
+        doc_view = DocumentViewer(conf.text_name)
+    except FileNotFoundError:
+        print('\nФайл не найден')
         return
 
     processes = list()

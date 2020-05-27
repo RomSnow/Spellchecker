@@ -16,7 +16,7 @@ LEVENSHTEIN_DIST = (1, 1, 2, 1, 1)
 
 class DictTests(unittest.TestCase):
     dict_exp = DictationExplorer(
-        '/home/ird-pc/Projects/Python/Spellchecker/Dictionaries/russian_dict.txt'
+        '/Dictionaries/russian_dict.dict'
     )
 
     def test_check_word_in_dict(self):
