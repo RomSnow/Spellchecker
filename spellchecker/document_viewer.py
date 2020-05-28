@@ -2,7 +2,7 @@
 import re
 from os import path
 
-from Spellchecker.file_manager import FileManager
+from spellchecker.file_manager import FileManager
 
 
 class DocumentViewer(FileManager):

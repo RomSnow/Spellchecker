@@ -1,5 +1,5 @@
 #!./venv/bin/python
-"""Реализация консольной версии программы Spellchecker
+"""Реализация консольной версии программы spellchecker
 
 Для получения информации по использованию программы
 следует обратиться к справке -h, --help"""
@@ -8,11 +8,10 @@ from multiprocessing import Process, Queue
 
 from progress.bar import Bar
 
-from Spellchecker.conf import Configuration
-from Spellchecker.dict_explorer import DictationExplorer
-from Spellchecker.document_viewer import DocumentViewer
-from Spellchecker.console_commands import ArgsParser
-from Spellchecker.dict_creator import DictationCreator
+from spellchecker.console_commands import ArgsParser
+from spellchecker.dict_creator import DictationCreator
+from spellchecker.dict_explorer import DictationExplorer
+from spellchecker.document_viewer import DocumentViewer
 
 
 def main():

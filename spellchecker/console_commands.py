@@ -3,7 +3,7 @@ import argparse
 import sys
 import os
 
-from Spellchecker.conf import Configuration
+from spellchecker.conf import Configuration
 
 
 class ArgsParser:
@@ -12,7 +12,7 @@ class ArgsParser:
     def __init__(self, argv):
         self._argv = argv
         self._parser = argparse.ArgumentParser(
-            description='Console Spellchecker',
+            description='Console spellchecker',
             prog='cmain'
         )
         self.add_functions()
@@ -54,8 +54,3 @@ class ArgsParser:
 
         return Configuration(data.text, data.d,
                              is_add, is_create, items)
-
-
-if __name__ == '__main__':
-    parser = ArgsParser(sys.argv)
-    parser.parse()

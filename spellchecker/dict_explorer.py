@@ -3,8 +3,8 @@ from multiprocessing import Queue
 
 from progress.bar import Bar
 
-from Spellchecker.fbtrie import Trie
-from Spellchecker.file_manager import FileManager
+from spellchecker.fbtrie import Trie
+from spellchecker.file_manager import FileManager
 
 
 class DictationExplorer(FileManager):
@@ -14,7 +14,8 @@ class DictationExplorer(FileManager):
         self._dict_file = dict_file
         self._words_fb = Trie()
         self._words_dict = dict()
-        self.bar = Bar('Load Dictionary', max=self.count_lines(dict_file))
+        self._prog_bar = Bar('Load Dictionary',
+                             max=self.count_lines(dict_file))
 
         with open(dict_file, 'r', encoding='utf-8') as file:
             for line in file:
@@ -26,9 +27,9 @@ class DictationExplorer(FileManager):
 
                 self._words_fb.insert(line_data[0])
                 self._words_dict[line_data[0]] = float(line_data[1])
-                self.bar.next()
+                self._prog_bar.next()
 
-        self.bar.finish()
+        self._prog_bar.finish()
 
     def check_word_in_dict(self, search_word: str) -> bool:
         """Проверяет вхождение слова в словарь"""
@@ -71,10 +72,6 @@ class DictationExplorer(FileManager):
                 (word_data[1], self._words_dict[word_data[0]],
                  word_data[0])
             )
-
-            a = 0
-            if word_data[0] == 'мама':
-                a += 1
 
             pop_words = self._sort_words(pop_words)
             if len(pop_words) > count:

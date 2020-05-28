@@ -1,10 +1,12 @@
 """Тесты на работу словаря"""
 import subprocess
+import sys
 import unittest
 import os
 
+sys.path.append(os.path.dirname(__file__) + '/..')
 
-from Spellchecker.dict_explorer import DictationExplorer
+from spellchecker.dict_explorer import DictationExplorer
 
 CORRECT_WORDS = ('мама', 'дом', 'помощь', 'нужда', 'пламя')
 INCORRECT_WORDS = ('мома', 'дйм', 'посмщь', 'нежда', 'плмя')
