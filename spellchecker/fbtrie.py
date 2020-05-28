@@ -20,10 +20,6 @@ class Trie:
             else:
                 yield from self.traverse(d, child, sofar + c)
 
-    @staticmethod
-    def _k_fn(k):
-        return k
-
     def fuzzy(self, query, k, k_fn=None, prefix=False):
         """Найти все слова расхождения с которыми меньше k"""
         n = len(query)
@@ -32,7 +28,7 @@ class Trie:
             tab[0][j] = j
 
         if not k_fn:
-            k_fn = self._k_fn(k)
+            k_fn = lambda _t: k
         yield from self.fuzzy_(k_fn, tab, self.root, 1, "", query, prefix)
 
     def fuzzy_(self, k_fn, tab, node, i, sofar, query, prefix=False):
@@ -41,7 +37,7 @@ class Trie:
         if prefix and i >= len(query) + 1:
             d = tab[i - 1][len(query)]
             if d <= k:
-                # yield sofar, d
+                yield sofar, d
                 yield from self.traverse(d, node, sofar)
             return
 
