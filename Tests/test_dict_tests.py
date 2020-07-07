@@ -6,7 +6,10 @@ import os
 
 sys.path.append(os.path.dirname(__file__) + '/..')
 
+import spellchecker.console_commands as c_com
+import spellchecker.document_viewer as dv
 from spellchecker.dict_explorer import DictationExplorer
+
 
 CORRECT_WORDS = ('мама', 'дом', 'помощь', 'нужда', 'пламя')
 INCORRECT_WORDS = ('мома', 'дйм', 'посмщь', 'нежда', 'плмя')
@@ -55,11 +58,33 @@ class DictTests(unittest.TestCase):
         self.assertEqual(
             ('дом', 'лестница'),
             self.dict_exp.check_stuck_words('домлестница')
-                         )
+        )
         self.assertEqual(
             None,
             self.dict_exp.check_stuck_words('афарокр')
         )
+
+    def test_console_args(self):
+        parser = c_com.ArgsParser([
+            '-d', '/Dictionaries/russian_dict.dict', 'text.txt'
+        ])
+        conf = parser.parse()
+        self.assertTrue(
+            conf.text_name == 'text.txt' and
+            conf.dictation_name == '/Dictionaries/russian_dict.dict' and
+            not conf.is_add_mode and
+            not conf.is_create_mode and
+            conf.items == []
+        )
+
+    def test_doc_view(self):
+        doc = dv.DocumentViewer(os.path.dirname(__file__) + '/test_text.txt')
+        good_ans = ('привет', '-', 'пока', 'вы', 'здесь', '-', 'я', 'тут')
+        for words in doc.words_on_line:
+            for index, word in enumerate(words):
+                self.assertEqual(
+                    word, good_ans[index]
+                )
 
 
 if __name__ == '__main__':
