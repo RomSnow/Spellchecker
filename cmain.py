@@ -23,6 +23,11 @@ def main():
         dict_creator.create(*conf.items)
         return
 
+    if conf.text_name is None:
+        print('Не указан файл для проверки. '
+              'Для справки воспользуйтесь -h, --help')
+        return 1
+
     try:
         dict_exp = DictationExplorer(conf.dictation_name)
     except FileNotFoundError:
@@ -44,7 +49,7 @@ def main():
         return
 
     processes = list()
-    proc_queue = Queue()
+    proc_queue = Queue(maxsize=100)
     found_words = list()
 
     line_bar = Bar('Text Processing', max=doc_view.lines_count)
