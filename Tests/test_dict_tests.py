@@ -91,15 +91,20 @@ class DictTests(unittest.TestCase):
 
     def test_dict_creator(self):
         creator = dc.DictationCreator()
-        creator.create('test_text.txt', 'out_dict')
+        creator.create(f'{os.path.dirname(__file__)}/test_text.txt',
+                       'out_dict')
         with open('out_dict.dict') as out:
-            with open('normal_dict.dict') as normal:
+            with open(
+                    f'{os.path.dirname(__file__)}/normal_dict.dict'
+            ) as normal:
                 self.assertEqual(normal.read(), out.read())
 
         os.remove('out_dict.dict')
 
     def test_main_test(self):
-        doc = dv.DocumentViewer('main_test_text.txt')
+        doc = dv.DocumentViewer(
+            f'{os.path.dirname(__file__)}/main_test_text.txt'
+        )
         found_words = main.process_text(doc, self.dict_exp)
         correct_words = {'носить', 'класть', 'сани'}
         for word_data in sorted(found_words, key=lambda _t: _t[2]):
