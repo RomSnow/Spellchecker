@@ -6,6 +6,7 @@ import os
 
 sys.path.append(os.path.dirname(__file__) + '/..')
 
+import cmain as main
 import spellchecker.console_commands as c_com
 import spellchecker.document_viewer as dv
 import spellchecker.dict_creator as dc
@@ -19,8 +20,10 @@ LEVENSHTEIN_DIST = (1, 1, 2, 1, 1)
 
 class DictTests(unittest.TestCase):
     dict_exp = DictationExplorer(
-        f'{os.path.dirname(__file__)}/../Dictionaries/russian_dict.dict'
+        f'{os.path.dirname(__file__)}/../Dictionaries/russian_dict_lite.txt'
     )
+
+    doc = dv.DocumentViewer(os.path.dirname(__file__) + '/test_text.txt')
 
     def test_check_word_in_dict(self):
         """Проверяет корректность нахождения слова в словаре"""
@@ -79,9 +82,8 @@ class DictTests(unittest.TestCase):
         )
 
     def test_doc_view(self):
-        doc = dv.DocumentViewer(os.path.dirname(__file__) + '/test_text.txt')
         good_ans = ('привет', '-', 'пока', 'вы', 'здесь', '-', 'я', 'тут')
-        for words in doc.words_on_line:
+        for words in self.doc.words_on_line:
             for index, word in enumerate(words):
                 self.assertEqual(
                     word, good_ans[index]
@@ -95,6 +97,13 @@ class DictTests(unittest.TestCase):
                 self.assertEqual(normal.read(), out.read())
 
         os.remove('out_dict.dict')
+
+    def test_main_test(self):
+        doc = dv.DocumentViewer('main_test_text.txt')
+        found_words = main.process_text(doc, self.dict_exp)
+        correct_words = {'носить', 'класть', 'сани'}
+        for word_data in sorted(found_words, key=lambda _t: _t[2]):
+            self.assertTrue(set(word_data[0]) & correct_words)
 
 
 if __name__ == '__main__':

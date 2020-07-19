@@ -13,6 +13,49 @@ from spellchecker.dict_explorer import DictationExplorer
 from spellchecker.document_viewer import DocumentViewer
 
 
+def process_text(doc_view, dict_exp):
+    processes = list()
+    proc_queue = Queue(maxsize=100)
+    found_words = list()
+
+    line_bar = Bar('Text Processing', max=doc_view.lines_count)
+    for line_index, words in enumerate(doc_view.words_on_line):
+        process_line(words, dict_exp, found_words,
+                     line_index, proc_queue, processes)
+        line_bar.next()
+
+    line_bar.finish()
+    print()
+
+    for proc in processes:
+        found_words.append(proc_queue.get())
+        proc.join()
+
+    return found_words
+
+
+def process_line(words_on_line, dict_exp,
+                 found_words, line_index,
+                 proc_queue, processes):
+    for word in words_on_line:
+
+        if dict_exp.check_word_in_dict(word):
+            continue
+
+        stuck_words = dict_exp.check_stuck_words(word)
+
+        if stuck_words is not None:
+            found_words.append((
+                stuck_words, word, line_index + 1
+            ))
+            continue
+
+        proc = Process(target=dict_exp.multiproc_fmsw,
+                       args=(word, 5, proc_queue, line_index + 1))
+        proc.start()
+        processes.append(proc)
+
+
 def main():
     """Main function"""
     parser = ArgsParser(sys.argv[1:])
@@ -48,39 +91,7 @@ def main():
         print('\nФайл не найден')
         return
 
-    processes = list()
-    proc_queue = Queue(maxsize=100)
-    found_words = list()
-
-    line_bar = Bar('Text Processing', max=doc_view.lines_count)
-    for line_index, words in enumerate(doc_view.words_on_line):
-
-        for word in words:
-
-            if dict_exp.check_word_in_dict(word):
-                continue
-
-            stuck_words = dict_exp.check_stuck_words(word)
-
-            if stuck_words is not None:
-                found_words.append((
-                    stuck_words, word, line_index + 1
-                ))
-                continue
-
-            proc = Process(target=dict_exp.multiproc_fmsw,
-                           args=(word, 5, proc_queue, line_index + 1))
-            proc.start()
-            processes.append(proc)
-        line_bar.next()
-
-    line_bar.finish()
-    print()
-
-    for proc in processes:
-        found_words.append(proc_queue.get())
-        proc.join()
-
+    found_words = process_text(doc_view, dict_exp)
     for word_data in sorted(found_words,
                             key=lambda _t: _t[2]):
         print(f"{word_data[1]} ?--> ({', '.join(word_data[0])}) "
