@@ -8,6 +8,7 @@ sys.path.append(os.path.dirname(__file__) + '/..')
 
 import spellchecker.console_commands as c_com
 import spellchecker.document_viewer as dv
+import spellchecker.dict_creator as dc
 from spellchecker.dict_explorer import DictationExplorer
 
 
@@ -85,6 +86,15 @@ class DictTests(unittest.TestCase):
                 self.assertEqual(
                     word, good_ans[index]
                 )
+
+    def test_dict_creator(self):
+        creator = dc.DictationCreator()
+        creator.create('test_text.txt', 'out_dict')
+        with open('out_dict.dict') as out:
+            with open('normal_dict.dict') as normal:
+                self.assertEqual(normal.read(), out.read())
+
+        os.remove('out_dict.dict')
 
 
 if __name__ == '__main__':
